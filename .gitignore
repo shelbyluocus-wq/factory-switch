@@ -1,0 +1,14 @@
+__pycache__/
+.venv/
+.venv-mac/
+build/
+dist/
+*.spec
+!FactorySwitch.mac.spec
+!FactorySwitch.windows.spec
+.DS_Store
+*.dpapi
+*.keychain
+auth.v2.*
+.env
+.env.*

@@ -1,0 +1,9 @@
+* text=auto
+*.command text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
+*.py text eol=lf
+*.spec text eol=lf
+*.md text eol=lf
+*.jpg binary
+*.png binary

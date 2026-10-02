@@ -1,0 +1,30 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Factory Switch</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <header class="titlebar">
+      <div class="titlebar-drag pywebview-drag-region"><span class="brand-mark"></span><span>Factory Switch</span></div>
+      <div class="window-controls">
+        <button data-window="minimize" aria-label="最小化"><svg viewBox="0 0 16 16"><path d="M3 8h10"/></svg></button>
+        <button data-window="maximize" aria-label="最大化或还原"><svg viewBox="0 0 16 16"><rect x="3.5" y="3.5" width="9" height="9" rx="1"/></svg></button>
+        <button data-window="close" class="window-close" aria-label="关闭"><svg viewBox="0 0 16 16"><path d="m4 4 8 8M12 4l-8 8"/></svg></button>
+      </div>
+    </header>
+    <main>
+      <div class="toolbar"><h1>账号</h1><button class="button primary" id="add"><span data-icon="plus"></span>添加账号</button></div>
+      <div id="account-list" class="account-list" aria-label="账号列表"><div class="empty">正在读取账号…</div></div>
+      <div id="login-hint" class="login-hint" hidden>在 Factory 登录后，点击下方「保存当前账号」。</div>
+      <footer><button class="button secondary" id="save"><span data-icon="save"></span>保存当前账号</button><span class="status" id="status" role="status"></span><button class="icon-button" id="refresh" aria-label="刷新账号和用量" title="刷新账号和用量"><span data-icon="refresh"></span></button></footer>
+    </main>
+  </div>
+  <dialog id="modal" aria-labelledby="modal-title"><form id="modal-form"><h2 id="modal-title"></h2><div id="modal-body"></div><div class="modal-actions"><button type="button" class="button secondary" id="cancel">取消</button><button type="submit" class="button primary" id="confirm">确认</button></div></form></dialog>
+</body>
+</html>
