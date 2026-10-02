@@ -164,7 +164,7 @@ def main():
     html = html.replace('<script src="app.js" defer></script>',
                         "<script>" + (ui / "app.js").read_text(encoding="utf-8") + "</script>")
     if "--preview" in sys.argv:
-        html = html.replace('<body>', '<body data-preview="true">')
+        html = html.replace('<html', '<html data-preview="true"', 1)
     if core.MACOS:
         html = html.replace('<body', '<body class="macos"', 1)
     window = webview.create_window("Factory Switch", html=html, js_api=api,

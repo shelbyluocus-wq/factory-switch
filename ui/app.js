@@ -4,7 +4,7 @@
   const icon=name=>`<svg viewBox="0 0 24 24" aria-hidden="true">${paths[name]||''}</svg>`;
   const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const $=id=>document.getElementById(id);
-  const preview=new URLSearchParams(location.search).get('preview')==='1'||document.body.dataset.preview==='true';
+  const preview=new URLSearchParams(location.search).get('preview')==='1'||document.documentElement.dataset.preview==='true';
   let state=null,ready=false,busy=false,modalAction=null,priorFocus;
   const usageCache=new Map();
   let usageRunning=false,usageQueued=false;
