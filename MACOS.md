@@ -1,6 +1,8 @@
 # Factory Switch — macOS 适配版
 
-这是包含源码、双击启动器和 `.app` 打包脚本的 macOS 适配包，尚未在 Mac 实机验证。当前已完成 Windows 回归和模拟 macOS 认证切换测试，不等于原生应用已经验证可用。
+可从 [GitHub Releases](https://github.com/shelbyluocus-wq/factory-switch/releases/latest) 下载 Apple Silicon 或 Intel 对应的 DMG，将应用拖入 Applications，无需安装 Python。GitHub 的 macOS 构建环境已完成打包与原生依赖/界面资源检查；真实账号切换和系统授权尚未实机验证。
+
+以下是源码启动和自行打包的方法。
 
 ## 首次启动
 
