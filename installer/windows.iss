@@ -1,4 +1,9 @@
-#define AppVersion "0.2.1"
+#ifndef AppVersion
+  #define AppVersion "0.2.1"
+#endif
+#ifndef AppFiles
+  #define AppFiles "..\dist\Factory Switch"
+#endif
 [Setup]
 AppId={{E408AD11-7CA4-4B16-A81B-6C77D147390C}
 AppName=Factory Switch
@@ -20,7 +25,7 @@ SetupIconFile=..\ui\app-icon.ico
 CloseApplications=yes
 
 [Files]
-Source: "..\dist\Factory Switch\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#AppFiles}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\Factory Switch"; Filename: "{app}\Factory Switch.exe"

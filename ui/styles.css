@@ -45,3 +45,50 @@ footer{padding-top:18px}
   .usage-quota{flex-wrap:wrap;gap:6px 12px}
   .usage-quota .usage-meter{flex-basis:100%}
 }
+
+.view-tabs{display:flex;align-items:center;gap:5px;min-width:0}
+.view-tabs button{font-size:17px;font-weight:550;padding:8px 10px;border-radius:6px;color:var(--muted);white-space:nowrap}
+.view-tabs button[aria-selected="true"]{background:#8275e91b;color:#d8d0fa}
+.view-tabs button:hover:not(:disabled){background:#8275e914;color:#e2dcf5}
+.view-panel{display:flex;flex:1;min-height:0;flex-direction:column}
+.local-panel{overflow:hidden}
+.local-periods{display:flex;gap:4px;padding:4px;background:#18191e;border:1px solid var(--border);border-radius:8px;margin-bottom:14px;flex-shrink:0;align-self:flex-start}
+.local-periods button{padding:7px 14px;border:0;border-radius:5px;background:transparent;color:var(--muted);font-size:12px;white-space:nowrap}
+.local-periods button:hover{background:#282632;color:#ded7ef}
+.local-periods button[aria-pressed="true"]{background:#373044;color:#ede4ff}
+#local-usage{min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;flex:1}
+.local-caption{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:12px}
+.local-total{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;background:#242031;border:1px solid #4c4269;border-radius:9px;padding:15px 18px;margin-bottom:12px}
+.local-total-label{font-size:14px;color:#c9bee5;flex:1;min-width:0}
+.local-total-value{font-size:35px;font-weight:650;letter-spacing:-.8px;color:#eee7ff;line-height:1.25;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.local-total-note{flex-basis:100%;font-size:11px;color:#a69cbd;line-height:1.6}
+.local-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.local-metric{padding:10px 13px;background:#1b1c22;border:1px solid var(--border);border-radius:8px;min-width:0}
+.local-metric-label{display:block;color:#aaa6bb;font-size:12px}
+.local-metric-value{display:block;font-size:20px;line-height:1.4;letter-spacing:-.4px;font-variant-numeric:tabular-nums;color:#eeeaf8;margin-top:4px;overflow-wrap:anywhere}
+.local-metric-note{display:block;font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+.local-explanation{color:#9d99ad;font-size:12px;line-height:1.8;margin:13px 0 18px}
+.local-warning{color:#d6ad92}
+.local-section-title{font-size:14px;font-weight:550;margin-bottom:10px}
+.local-session-list{background:#18191e;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.local-session{border-bottom:1px solid #2a2b33}
+.local-session:last-child{border-bottom:0}
+.local-session summary{cursor:pointer;list-style:none;display:flex;gap:12px;align-items:center;padding:13px 15px}
+.local-session summary::-webkit-details-marker{display:none}
+.local-session summary::after{content:"›";color:#9891ae;font-size:23px;flex-shrink:0;transition:transform 120ms ease}
+.local-session[open] summary::after{transform:rotate(90deg)}
+.local-session summary:hover{background:#23232b}
+.local-session summary:focus-visible{outline:2px solid #a99ef4;outline-offset:-3px;border-radius:5px}
+.local-session-copy{flex:1;min-width:0}
+.local-session-title{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:#d6d2e2;line-height:1.8}
+.local-session-meta{display:block;color:var(--muted);font-size:11px;line-height:1.7;overflow-wrap:anywhere}
+.local-session-value{font-size:12px;text-align:right;color:#c4badb;font-variant-numeric:tabular-nums;white-space:nowrap}
+.local-session-value small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.local-session-details{padding:0 15px 15px}
+.local-session-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 18px;padding-top:4px;font-size:12px}
+.local-session-metrics span{display:flex;justify-content:space-between;gap:8px;min-width:0;color:var(--muted)}
+.local-session-metrics b{font-weight:500;color:#d5ccdf;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.local-session-details p{color:var(--muted);font-size:11px;line-height:1.8;margin-top:10px;overflow-wrap:anywhere}
+#refresh.loading-local svg{animation:spin .8s linear infinite}
+@media(max-width:590px){.view-tabs button{font-size:16px;padding:8px}.local-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.local-metric{padding:11px 12px}.local-metric-value{font-size:20px}.local-session summary{padding:12px}.local-session-metrics{gap:9px 12px}}
+@media(prefers-reduced-motion:reduce){.local-session summary::after{transition:none}#refresh.loading-local svg{animation:none}}

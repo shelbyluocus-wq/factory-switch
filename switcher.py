@@ -21,6 +21,7 @@ import urllib.request
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from errors import SwitchError
+import session_history
 
 MACOS = sys.platform == "darwin"
 if MACOS:
@@ -31,7 +32,7 @@ STORE = (Path.home() / "Library/Application Support/FactoryAccountSwitcher" if M
 APP = mac_backend.app_path() if MACOS else Path(os.environ.get("LOCALAPPDATA", Path.home())) / "Factory" / "factory-desktop.exe"
 AUTH_FILES = ("auth.v2.keyring", "auth.v2.loginkeychain") if MACOS else ("auth.v2.keyring",)
 BACKUP_SUFFIX = ".keychain" if MACOS else ".dpapi"
-# Preserve settings/history; only replace authentication and account-specific policy caches.
+# Authentication snapshots exclude history; sharing has its own encrypted backups.
 FILES = AUTH_FILES + ("org-managed-settings.cache.json", "org-managed-settings.cache.json.backup")
 UNSUPPORTED = ("auth.v2.file", "auth.v2.key") + (() if MACOS else ("auth.v2.loginkeychain",))
 CREATE_NO_WINDOW = 0x08000000
@@ -317,6 +318,29 @@ def replace_files(files: dict[str, bytes]):
             path.unlink(missing_ok=True)
 
 
+def share_local_history():
+    if processes():
+        raise SwitchError("Factory / Droid 仍在运行，拒绝修改会话文件。")
+    plan = session_history.plan_sharing(HOME)
+    plan.apply(STORE, BACKUP_SUFFIX, protect, atomic_write)
+    return plan
+
+
+def enable_session_sharing() -> dict:
+    """Apply local sharing to the current login without replacing credentials."""
+    check_launch_environment()
+    stop_factory()
+    plan = share_local_history()
+    try:
+        start_factory()
+    except Exception:
+        if not processes():
+            plan.rollback(atomic_write)
+        raise
+    return {"launched": True, "shared_sessions": plan.session_count,
+            "session_backup": str(plan.backup) if plan.backup else None}
+
+
 def activate(account_id: str | None) -> dict:
     check_launch_environment()
     if account_id is None and not auth_file(current_files()):
@@ -335,7 +359,9 @@ def activate(account_id: str | None) -> dict:
             target = read_snapshot(backup_path(account_id))
     journal = recovery_path()
     atomic_write(journal, encode_snapshot(previous, {}, "切换前恢复点"))
+    sharing = None
     try:
+        sharing = share_local_history()
         replace_files(target["files"] if target else {})
         if target and snapshot_identity(current_files())["account_id"] != account_id:
             raise SwitchError("切换后的账号校验失败。")
@@ -343,9 +369,14 @@ def activate(account_id: str | None) -> dict:
     except Exception:
         # Restore only while stopped; recovery.dpapi remains available after failures.
         if not processes():
-            replace_files(previous)
+            try:
+                replace_files(previous)
+            finally:
+                if sharing is not None:
+                    sharing.rollback(atomic_write)
         raise
     return {"launched": True, "local_account_id": account_id,
+            "shared_sessions": sharing.session_count,
             "server_verified": False, "next_step": "请在 Factory 检查登录账号和连接状态" if target else "请在 Factory 登录第二个账号，然后保存当前账号"}
 
 
@@ -410,6 +441,7 @@ def main():
     switch.add_argument("account_id")
     subs.add_parser("new-login")
     subs.add_parser("recover")
+    subs.add_parser("share-sessions")
     args = parser.parse_args()
     try:
         with exclusive():
@@ -423,8 +455,10 @@ def main():
                 result = activate(args.account_id)
             elif args.command == "new-login":
                 result = activate(None)
-            else:
+            elif args.command == "recover":
                 result = recover()
+            else:
+                result = enable_session_sharing()
         print(json.dumps(result, ensure_ascii=False, indent=2))
     except SwitchError as exc:
         print(json.dumps({"error": str(exc)}, ensure_ascii=False), file=sys.stderr)

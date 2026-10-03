@@ -19,9 +19,9 @@
       </div>
     </header>
     <main>
-      <div class="toolbar"><h1>账号</h1><button class="button primary" id="add"><span data-icon="plus"></span>添加账号</button></div>
-      <div id="account-list" class="account-list" aria-label="账号列表"><div class="empty">正在读取账号…</div></div>
-      <div id="login-hint" class="login-hint" hidden>在 Factory 登录后，点击下方「保存当前账号」。</div>
+      <div class="toolbar"><div class="view-tabs" role="tablist" aria-label="查看内容"><button id="tab-accounts" role="tab" aria-selected="true" aria-controls="accounts-panel">账号</button><button id="tab-local" role="tab" aria-selected="false" aria-controls="local-panel" tabindex="-1">本机用量</button></div><button class="button primary" id="add"><span data-icon="plus"></span>添加账号</button></div>
+      <section id="accounts-panel" class="view-panel" role="tabpanel" aria-labelledby="tab-accounts"><div id="account-list" class="account-list" aria-label="账号列表"><div class="empty">正在读取账号…</div></div><div id="login-hint" class="login-hint" hidden>在 Factory 登录后，点击下方「保存当前账号」。</div></section>
+      <section id="local-panel" class="view-panel local-panel" role="tabpanel" aria-labelledby="tab-local" hidden><div class="local-periods" role="group" aria-label="统计时间"><button data-period="today" aria-pressed="false">今日</button><button data-period="7d" aria-pressed="false">近 7 天</button><button data-period="30d" aria-pressed="false">近 30 天</button><button data-period="all" aria-pressed="true">全部</button></div><div id="local-usage" aria-live="polite"><div class="empty">正在读取本机用量…</div></div></section>
       <footer><button class="button secondary" id="save"><span data-icon="save"></span>保存当前账号</button><span class="status" id="status" role="status"></span><button class="icon-button" id="refresh" aria-label="刷新账号和用量" title="刷新账号和用量"><span data-icon="refresh"></span></button></footer>
     </main>
   </div>

@@ -11,6 +11,7 @@ import time
 
 import switcher as core
 import usage
+import local_usage
 
 
 class DesktopApi:
@@ -22,6 +23,8 @@ class DesktopApi:
         self._history = []
         self._maximized = False
         self._usage_lock = threading.Lock()
+        self._local_usage_lock = threading.Lock()
+        self._local_usage_reader = local_usage.LocalUsageReader()
 
     def _record(self, title, detail="", kind="success"):
         self._history.insert(0, {"title": title, "detail": detail, "kind": kind,
@@ -81,6 +84,17 @@ class DesktopApi:
             return {"ok": True, "usage": usage.fetch(account_id)}
         finally:
             self._usage_lock.release()
+
+    def get_local_usage(self):
+        # Local reads share neither the account action lock nor the network usage lock.
+        if not self._local_usage_lock.acquire(blocking=False):
+            return {"ok": False, "error": "正在读取本机用量，请稍候。"}
+        try:
+            return {"ok": True, "usage": self._local_usage_reader.fetch(core.HOME)}
+        except Exception:
+            return {"ok": False, "error": "无法读取本机会话用量，请刷新重试。"}
+        finally:
+            self._local_usage_lock.release()
 
     def save_account(self, label=""):
         def action():

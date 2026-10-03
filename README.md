@@ -37,8 +37,9 @@ Factory Switch 将 Factory 的登录状态加密保存在本机，切换时保�
 - **保存当前账号**：加密备份登录状态，可添加账号备注。
 - **切换账号**：保存离开账号时的最新登录状态，恢复目标账号并重启 Factory。
 - **查看用量**：按接口实际返回的数据，显示 Standard / Droid Core 的时间窗口用量，或组织与个人额度。
+- **本机用量**：读取 Droid 现存本地会话的累计 Token 与 Factory Credits 原始记录，查看输入、输出、缓存和思考 Token，以及各会话明细。
 - **本机加密备份**：Windows 使用 DPAPI；macOS 使用 AES-256-GCM，备份密钥存于系统钥匙串。
-- **保留现有资料**：保留项目、会话与设置，仅替换认证文件和组织策略缓存。
+- **共用本机会话**：切换前加密备份本地会话，处理组织关联并重建索引，让不同账号能看到同一份本地历史；会话 ID 和对话正文保持不变。
 - **操作保护**：检测仍在运行的 Factory / Droid，保留加密恢复点，并在部分失败情况下回滚。
 
 <details>
@@ -68,6 +69,20 @@ Factory Switch 将 Factory 的登录状态加密保存在本机，切换时保�
 
 界面缓存用量约 60 秒，手动刷新会重新查询。查询失败时显示错误；已有数据显示时会保留并标记为旧数据。用量查询不占用账号切换的操作锁。
 
+### 本机用量
+
+点击顶部 **本机用量** 页签，查看这台电脑 `.factory/sessions/` 中现存会话的累计记录与会话明细。该页面不需要登录或网络连接，在页面可见时约每 15 秒更新，也可点击右下角刷新或使用 `Ctrl+R` / `Command+R`。
+
+顶部 **真实消耗 Tokens** 显示按 Factory Desktop 0.190.0 本地统计口径汇总的输入 + 输出 + 缓存创建 + 缓存读取 + 思考 Token。Factory Credits 单独展示客户端原始值，不计入 Token 总量或换算成费用。总量、分类及会话明细自动使用“万 / 亿”，最多保留两位小数，悬停可看完整数字。
+
+可选择 **今日、近 7 天、近 30 天、全部**。近 7 / 30 天按本机日期计算并包含今日，总量、分类及会话明细一起筛选，刷新或切换页签会保留当前范围。
+
+**全部**只使用每个唯一会话自身的 `tokenUsage`，避免将包含子会话的汇总重复计算；备份文件不参与统计。仅在同一会话的五类 Token 都有记录时计算该会话总量。缺失字段显示 `—`，部分记录或读取失败会明确标注。
+
+**时间筛选**读取 `.factory/logs/droid-log-single.log` 及按日期轮转的日志中每次完成请求的时间与 Token 数值，对重复请求去重，不将跨天会话的整笔累计归到最后一天。只覆盖现存会话的现存请求日志；若日志汇总与会话累计有差异，会明确提示。日志不提供 Factory Credits，因此该项显示 `—`。没有可用请求日志时显示“无法按时间统计”；有历史日志但所选范围没有请求时显示零。
+
+这些数据不是官方账单，不包含已删除或其他设备上的历史。会话可以换模型或换账号，累计数据不作精确的模型或账号拆分；使用过多个模型的会话标为“混合模型”。读取不会修改本地会话或登录状态，也不占用账号切换锁。
+
 ### macOS 首次授权
 
 首次保存账号可能提示系统钥匙串访问；切换时也可能提示自动化授权，以便请求 Factory 正常退出。拒绝授权时应停止操作并显示错误。具体步骤与实机验收要求见 [MACOS.md](MACOS.md)。
@@ -81,7 +96,11 @@ Factory Switch 将 Factory 的登录状态加密保存在本机，切换时保�
 
 账号备份不保存明文 token。真实登录文件、账号备份、系统密钥和环境变量文件不应提交到 GitHub；忽略规则见 [.gitignore](.gitignore)。Windows 与 macOS 备份**不能直接互换**，在另一台电脑上也需要重新登录保存。
 
-多个账号仍共用 Factory 的项目、会话与设置，这**不是完全隔离的账号环境**。历史记录、组织界面和第三方授权的跨账号显示与隔离仍需单独确认。
+通过本工具切换的账号共用 Factory 的项目、本地会话与设置，这**不是完全隔离的账号环境**。Factory 0.190.0 会按组织过滤本地会话；仅保留文件不能保证跨账号显示。本工具在 Factory 正常退出后移除本地会话头部的 `organizationId`，使用客户端支持的旧会话兼容路径，并删除派生索引以便重建。Droid 恢复会话时可能重新关联当前组织，因此每次切换都会再次处理。
+
+原始会话与索引加密备份保存在上述备份目录的 `session-backups/` 下。所有本地历史都可能被切换后的账号读取；此功能不提供其他账号云端会话的访问权限，也不能保证云端同步和第三方授权能跨账号继承。Factory 后续更新可能需要重新适配。
+
+已有会话首次启用共享，可在完成任务后运行 `python switcher.py share-sessions`；它会正常退出并重新启动 Factory，不替换登录凭据。
 
 ## 兼容性与验证范围
 
@@ -121,6 +140,7 @@ bash Launch.command
 python -m pip install -r requirements-build.txt
 python -X utf8 -m unittest -v
 node scripts/test-ui-startup.cjs
+node scripts/test-local-usage-ui.cjs
 ```
 
 - Windows：运行 `python -m PyInstaller --noconfirm FactorySwitch.windows.spec`，然后用 Inno Setup 6 编译 `installer/windows.iss`。
@@ -148,6 +168,8 @@ switcher.py               账号备份、切换与恢复核心
 mac_backend.py            macOS 钥匙串和进程适配
 window_frame.py           Windows 窗口缩放支持
 usage.py                  只读用量查询
+local_usage.py            本机会话用量读取与去重汇总
+usage_timeline.py         按本机日期读取请求日志与时间范围汇总
 ui/                       HTML / CSS / JavaScript 与应用图标
 installer/                Windows 安装程序配置
 scripts/                  图标生成和打包检查
