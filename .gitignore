@@ -1,14 +1,45 @@
+# Python environments and generated caches
 __pycache__/
+*.py[cod]
 .venv/
 .venv-mac/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Build outputs; keep the two specifications required for native builds
 build/
 dist/
 *.spec
 !FactorySwitch.mac.spec
 !FactorySwitch.windows.spec
-.DS_Store
+*.exe
+*.msi
+*.dmg
+*.app/
+
+# Local Factory credentials, account backups, and secret files
+.factory/
+FactoryAccountSwitcher/
+accounts/
 *.dpapi
 *.keychain
+*.keyring
 auth.v2.*
+org-managed-settings.cache.json
+org-managed-settings.cache.json.backup
+*.pem
+*.key
+*.p12
+*.pfx
 .env
 .env.*
+!.env.example
+
+# Local logs and operating-system metadata
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini

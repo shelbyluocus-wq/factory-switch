@@ -4,6 +4,8 @@
 
 对象：Windows，本机 Factory Desktop 0.189.0。
 
+本文件保留当时版本的验证结果；后续安装包构建与当前主分支的区别见 [RELEASE_VALIDATION.md](RELEASE_VALIDATION.md)。
+
 ## 已实测
 
 - 原账号 A 的登录状态经 Windows DPAPI 加密备份、回读字节校验成功。
@@ -21,6 +23,6 @@
 - 历史记录、组织界面、第三方服务授权的跨账号显示及隔离。
 - Factory 升级、Windows 密钥变化或其他电脑的兼容性。
 - 强制关机等崩溃恢复。验证版保留加密恢复点，但不宣称多文件更新具备系统级原子性。
-- 尚未打包为独立 EXE。
+- 当时尚未打包为独立 EXE；后续已提供安装包，见 [RELEASE_VALIDATION.md](RELEASE_VALIDATION.md)。
 
 此记录不包含邮箱、用户标识、令牌或系统密钥。
