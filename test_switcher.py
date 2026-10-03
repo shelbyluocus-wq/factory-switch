@@ -1,9 +1,47 @@
 import tempfile
 from pathlib import Path
 import unittest
+import uuid
 from unittest.mock import patch
 
 import switcher as s
+
+
+@unittest.skipIf(s.MACOS, "Windows process handling")
+class WindowsProcessTests(unittest.TestCase):
+    def test_already_stopped_does_not_request_close(self):
+        with patch.object(s, "processes", return_value=[]), \
+             patch.object(s, "powershell", side_effect=s.SwitchError("unexpected close")) as close:
+            s.stop_factory()
+            close.assert_not_called()
+
+    def test_desktop_exiting_before_close_is_success(self):
+        # Execute the real PowerShell command with a unique absent process name
+        # so this test cannot close a user's Factory window.
+        run = s.powershell
+        absent = "FactorySwitchAbsent" + uuid.uuid4().hex
+        before = [{"Name": "factory-desktop.exe", "ExecutablePath": ""}]
+        with patch.object(s, "processes", side_effect=[before, []]), \
+             patch.object(s, "powershell", side_effect=lambda code: run(code.replace("factory-desktop", absent))):
+            s.stop_factory()
+
+    def test_real_powershell_errors_are_not_hidden_by_later_success(self):
+        with self.assertRaises(s.SwitchError):
+            s.powershell("Write-Error 'synthetic-process-query-failure'; '[]'")
+
+    def test_standalone_cli_still_blocks_closing(self):
+        cli = [{"Name": "droid.exe", "ExecutablePath": "C:\\tools\\droid.exe"}]
+        with patch.object(s, "processes", return_value=cli), patch.object(s, "powershell") as close:
+            with self.assertRaisesRegex(s.SwitchError, "独立 Droid CLI"):
+                s.stop_factory()
+            close.assert_not_called()
+
+    def test_desktop_that_remains_running_still_blocks_switching(self):
+        desktop = [{"Name": "factory-desktop.exe", "ExecutablePath": ""}]
+        with patch.object(s, "processes", return_value=desktop), patch.object(s, "powershell"), \
+             patch.object(s.time, "monotonic", side_effect=[0, 19]):
+            with self.assertRaisesRegex(s.SwitchError, "Factory 尚未完全退出"):
+                s.stop_factory()
 
 
 class SafetyTests(unittest.TestCase):

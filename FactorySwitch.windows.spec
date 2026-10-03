@@ -8,5 +8,5 @@ a = Analysis([str(root / 'gui.py')], pathex=[str(root)],
              excludes=['webview.platforms.cocoa', 'webview.platforms.gtk', 'webview.platforms.qt'])
 pyz = PYZ(a.pure)
 exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name='Factory Switch',
-          console=False, strip=False, upx=False)
+          console=False, strip=False, upx=False, icon=str(root / 'ui' / 'app-icon.ico'))
 collection = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name='Factory Switch')

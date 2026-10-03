@@ -16,6 +16,7 @@ Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
 UninstallDisplayIcon={app}\Factory Switch.exe
+SetupIconFile=..\ui\app-icon.ico
 CloseApplications=yes
 
 [Files]

@@ -243,6 +243,8 @@ def accounts() -> list[dict]:
 
 
 def powershell(code: str) -> str:
+    # Fail closed on real query errors, even if a later command succeeds.
+    code = "$ErrorActionPreference='Stop'; " + code
     encoded = base64.b64encode(code.encode("utf-16-le")).decode()
     result = subprocess.run(["powershell.exe", "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded],
                             capture_output=True, creationflags=CREATE_NO_WINDOW, timeout=45)
@@ -266,12 +268,17 @@ def stop_factory():
     if MACOS:
         mac_backend.request_quit(APP, before)
     else:
+        if not before:
+            return
         standalone = [p for p in before if p["Name"] == "droid.exe" and
                       "\\Factory\\app-" not in (p.get("ExecutablePath") or "")]
         if standalone:
             raise SwitchError("检测到独立 Droid CLI，请先正常退出，以免它写入旧账号状态。")
-        powershell("Get-Process -Name factory-desktop -ErrorAction SilentlyContinue | "
-                   "Where-Object MainWindowHandle -ne 0 | ForEach-Object { [void]$_.CloseMainWindow() }")
+        # Filtering the process list also tolerates Factory exiting between
+        # the initial check and this request; -Name would report an error.
+        powershell("Get-Process -ErrorAction Stop | "
+                   "Where-Object { $_.ProcessName -eq 'factory-desktop' -and $_.MainWindowHandle -ne 0 } | "
+                   "ForEach-Object { [void]$_.CloseMainWindow() }")
     deadline = time.monotonic() + 18
     while True:
         if not processes():

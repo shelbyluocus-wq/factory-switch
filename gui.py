@@ -154,11 +154,16 @@ def main():
         for name in ("index.html", "styles.css", "app.js"):
             if not (Path(__file__).parent / "ui" / name).read_text(encoding="utf-8"):
                 raise RuntimeError("Missing UI resource")
+        for name in ("app-icon.png", "app-icon.ico"):
+            if not (Path(__file__).parent / "ui" / name).read_bytes():
+                raise RuntimeError("Missing application icon")
         return
     api = DesktopApi()
     ui = Path(__file__).parent / "ui"
     # Inline local assets: no localhost API, remote CDN, or arbitrary filesystem routes.
     html = (ui / "index.html").read_text(encoding="utf-8")
+    html = html.replace('src="app-icon.png"',
+                        'src="data:image/png;base64,' + base64.b64encode((ui / "app-icon.png").read_bytes()).decode('ascii') + '"')
     html = html.replace('<link rel="stylesheet" href="styles.css">',
                         "<style>" + (ui / "styles.css").read_text(encoding="utf-8") + "</style>")
     html = html.replace('<script src="app.js" defer></script>',
@@ -167,6 +172,9 @@ def main():
         html = html.replace('<html', '<html data-preview="true"', 1)
     if core.MACOS:
         html = html.replace('<body', '<body class="macos"', 1)
+    if sys.platform == "win32":
+        import ctypes
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("local.factory-account-switcher")
     window = webview.create_window("Factory Switch", html=html, js_api=api,
                                    width=640, height=600, min_size=(500, 340),
                                    background_color="#101114", frameless=not core.MACOS,
@@ -181,7 +189,8 @@ def main():
     window.events.restored += lambda: setattr(api, "_maximized", False)
     webview.settings["ALLOW_DOWNLOADS"] = False
     webview.settings["ALLOW_FILE_URLS"] = False
-    webview.start(gui="cocoa" if core.MACOS else "edgechromium", debug=False, private_mode=True)
+    webview.start(gui="cocoa" if core.MACOS else "edgechromium", debug=False, private_mode=True,
+                  icon=str(ui / "app-icon.ico") if sys.platform == "win32" else None)
 
 
 if __name__ == "__main__":
