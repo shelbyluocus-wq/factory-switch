@@ -59,8 +59,8 @@ jobs:
           mkdir -p dist/dmg dist/release
           ditto "dist/Factory Switch.app" "dist/dmg/Factory Switch.app"
           ln -s /Applications dist/dmg/Applications
-          hdiutil create -volname "Factory Switch" -srcfolder dist/dmg -ov -format UDZO "dist/release/FactorySwitch-0.2.0-${TARGET}.dmg"
-          hdiutil verify "dist/release/FactorySwitch-0.2.0-${TARGET}.dmg"
+          hdiutil create -volname "Factory Switch" -srcfolder dist/dmg -ov -format UDZO "dist/release/FactorySwitch-0.2.1-${TARGET}.dmg"
+          hdiutil verify "dist/release/FactorySwitch-0.2.1-${TARGET}.dmg"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ matrix.target }}

@@ -38,8 +38,8 @@ exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name='Factory Switch',
 collection = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name='Factory Switch')
 app = BUNDLE(collection, name='Factory Switch.app',
              bundle_identifier='local.factory-account-switcher',
-             info_plist={'CFBundleShortVersionString': '0.2.0',
-                         'CFBundleVersion': '2',
+             info_plist={'CFBundleShortVersionString': '0.2.1',
+                         'CFBundleVersion': '3',
                          'LSMinimumSystemVersion': '13.0',
                          'NSHighResolutionCapable': True,
                          'NSAppleEventsUsageDescription': '切换账号前，请求 Factory 正常退出以安全保存登录状态。'})

@@ -1,4 +1,4 @@
-#define AppVersion "0.2.0"
+#define AppVersion "0.2.1"
 [Setup]
 AppId={{E408AD11-7CA4-4B16-A81B-6C77D147390C}
 AppName=Factory Switch
@@ -11,7 +11,7 @@ PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir=..\dist\release
-OutputBaseFilename=FactorySwitch-0.2.0-windows-x64-setup
+OutputBaseFilename=FactorySwitch-{#AppVersion}-windows-x64-setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern

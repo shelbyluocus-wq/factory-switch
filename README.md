@@ -6,7 +6,7 @@
 
 保存账号 · 一键切换 · 查看用量
 
-[下载安装](https://github.com/shelbyluocus-wq/factory-switch/releases/tag/v0.2.0) · [使用方法](#使用方法) · [macOS 说明](MACOS.md) · [问题反馈](https://github.com/shelbyluocus-wq/factory-switch/issues)
+[下载安装](https://github.com/shelbyluocus-wq/factory-switch/releases/tag/v0.2.1) · [使用方法](#使用方法) · [macOS 说明](MACOS.md) · [问题反馈](https://github.com/shelbyluocus-wq/factory-switch/issues)
 
 </div>
 
@@ -18,19 +18,19 @@ Factory Switch 将 Factory 的登录状态加密保存在本机，切换时保�
 
 ## 下载
 
-从 [v0.2.0 Releases](https://github.com/shelbyluocus-wq/factory-switch/releases/tag/v0.2.0) 下载对应平台的安装包。安装包已包含 Python 运行环境，**无需另装 Python**。
+从 [v0.2.1 Releases](https://github.com/shelbyluocus-wq/factory-switch/releases/tag/v0.2.1) 下载对应平台的安装包。安装包已包含 Python 运行环境，**无需另装 Python**。
 
 | 平台 | 安装包 | 安装方式 |
 | --- | --- | --- |
-| Windows x64 | [FactorySwitch-0.2.0-windows-x64-setup.exe](https://github.com/shelbyluocus-wq/factory-switch/releases/download/v0.2.0/FactorySwitch-0.2.0-windows-x64-setup.exe) | 运行安装程序，按提示安装 |
-| macOS Apple Silicon | [FactorySwitch-0.2.0-macos-arm64.dmg](https://github.com/shelbyluocus-wq/factory-switch/releases/download/v0.2.0/FactorySwitch-0.2.0-macos-arm64.dmg) | 打开 DMG，将应用拖入 Applications |
-| macOS Intel | [FactorySwitch-0.2.0-macos-x64.dmg](https://github.com/shelbyluocus-wq/factory-switch/releases/download/v0.2.0/FactorySwitch-0.2.0-macos-x64.dmg) | 打开 DMG，将应用拖入 Applications |
+| Windows x64 | [FactorySwitch-0.2.1-windows-x64-setup.exe](https://github.com/shelbyluocus-wq/factory-switch/releases/download/v0.2.1/FactorySwitch-0.2.1-windows-x64-setup.exe) | 运行安装程序，按提示安装 |
+| macOS Apple Silicon | [FactorySwitch-0.2.1-macos-arm64.dmg](https://github.com/shelbyluocus-wq/factory-switch/releases/download/v0.2.1/FactorySwitch-0.2.1-macos-arm64.dmg) | 打开 DMG，将应用拖入 Applications |
+| macOS Intel | [FactorySwitch-0.2.1-macos-x64.dmg](https://github.com/shelbyluocus-wq/factory-switch/releases/download/v0.2.1/FactorySwitch-0.2.1-macos-x64.dmg) | 打开 DMG，将应用拖入 Applications |
 
 - Windows 需要 Microsoft Edge WebView2 Runtime。若启动时提示缺失，可从 [Microsoft 官方页面](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) 安装。
 - macOS 最低版本设为 13，自动构建使用 macOS 15。其他系统版本的实际兼容性仍需验证。
 - 安装包未使用 Windows 发布者证书或 Apple Developer ID 进行分发签名，macOS 也未完成公证，首次打开可能出现系统提示。
-- Release 提供 [SHA256SUMS.txt](https://github.com/shelbyluocus-wq/factory-switch/releases/download/v0.2.0/SHA256SUMS.txt)，可用于核对下载文件。
-- `main` 分支已有 v0.2.0 标签之后的进程退出修复和图标更新；这些改动尚未包含在 v0.2.0 发布版本中。
+- Release 提供 [SHA256SUMS.txt](https://github.com/shelbyluocus-wq/factory-switch/releases/download/v0.2.1/SHA256SUMS.txt)，可用于核对下载文件。
+- v0.2.1 已包含进程退出处理修复和应用图标更新，三个平台的安装包均由对应发布源码构建。
 
 ## 主要功能
 

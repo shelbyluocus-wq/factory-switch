@@ -1,6 +1,6 @@
 # Factory Switch — macOS 适配版
 
-可从 [GitHub Releases](https://github.com/shelbyluocus-wq/factory-switch/releases/tag/v0.2.0) 下载 Apple Silicon 或 Intel 对应的 DMG，将应用拖入 Applications，无需安装 Python。GitHub 的 macOS 构建环境已完成打包与原生依赖/界面资源检查；真实账号切换和系统授权尚未实机验证。
+可从 [GitHub Releases](https://github.com/shelbyluocus-wq/factory-switch/releases/tag/v0.2.1) 下载 Apple Silicon 或 Intel 对应的 DMG，将应用拖入 Applications，无需安装 Python。GitHub 的 macOS 构建环境已完成打包与原生依赖/界面资源检查；真实账号切换和系统授权尚未实机验证。
 
 以下是源码启动和自行打包的方法。
 
